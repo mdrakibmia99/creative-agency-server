@@ -117,6 +117,15 @@ async function run() {
         })
 
 
+        // get service name only to include
+        app.get('/courses', async (req, res) => {
+            const option = {
+                projection: { name: 1 }
+            };
+            res.send(await adminServiceCollection.find({}, option).toArray());
+        })
+
+
     } finally {
         // await database.close();
     }
