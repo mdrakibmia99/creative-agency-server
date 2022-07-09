@@ -134,10 +134,24 @@ async function run() {
         })
 
 
-        
+
         // everything about customer order
         app.get('/orders', async (req, res) => {
             res.send(await customerOrderCollection.find({}).toArray());
+        })
+
+
+        // adding state from admin to customer order
+        app.put('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const doc = {
+                $set: body
+            };
+            const order = await customerOrderCollection.updateOne(filter, doc, options);
+            res.send(order);
         })
 
     } finally {
