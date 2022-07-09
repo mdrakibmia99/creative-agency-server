@@ -29,6 +29,7 @@ async function run() {
         await client.connect();
         // only available for admins
         const userCollection = database.db('creative_agency').collection('users');
+        const adminServiceCollection = database.db('creative_agency').collection('service');
 
 
 
@@ -84,6 +85,13 @@ async function run() {
                 $set: body
             };
             res.send(await userCollection.updateOne(filter, doc, options));
+        })
+
+        // add service through admin
+        app.post('/service', async (req, res) => {
+            const body = req.body;
+            const service = await adminServiceCollection.insertOne(body);
+            res.send(service);
         })
 
     } finally {
