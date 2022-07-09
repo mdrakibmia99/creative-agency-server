@@ -60,6 +60,18 @@ async function run() {
             res.send(await userCollection.updateOne(filter, doc, options));
         })
 
+
+
+
+        // get customer email addresses else admin email address
+        app.get('/emails', async (req, res) => {
+            const query = { role: { $ne: 'admin' } };
+            const option = {
+                projection: { email: 1 }
+            };
+            res.send(await userCollection.find(query, option).toArray());
+        })
+
     } finally {
         // await database.close();
     }
