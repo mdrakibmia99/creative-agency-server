@@ -134,6 +134,12 @@ async function run() {
         })
 
 
+        
+        // everything about customer order
+        app.get('/orders', async (req, res) => {
+            res.send(await customerOrderCollection.find({}).toArray());
+        })
+
     } finally {
         // await database.close();
     }
