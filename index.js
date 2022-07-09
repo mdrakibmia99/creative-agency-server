@@ -94,6 +94,13 @@ async function run() {
             res.send(service);
         })
 
+
+        // show services from admin to customer
+        app.get('/services', async (req, res) => {
+            res.send(await adminServiceCollection.find({}).toArray());
+        })
+        
+
     } finally {
         // await database.close();
     }
