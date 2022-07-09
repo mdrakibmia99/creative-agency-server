@@ -35,6 +35,16 @@ async function run() {
             res.send(await userCollection.find({}).toArray());
         })
 
+
+        // get admin of a user from db
+        app.get('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const role = user?.role === 'admin' && 'admin';
+
+            res.send({ role: role });
+        })
+
     } finally {
         // await database.close();
     }
