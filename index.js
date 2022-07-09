@@ -27,9 +27,14 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
+        // only available for admins
+        const userCollection = database.db('creative_agency').collection('users');
 
-        // const collection = database.db('test').collection('devices');
-        // console.log('Creative agency server successfully connected!');
+        // get user form db
+        app.get('/users', async (req, res) => {
+            res.send(await userCollection.find({}).toArray());
+        })
+
     } finally {
         // await database.close();
     }
