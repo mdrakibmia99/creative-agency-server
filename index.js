@@ -30,6 +30,8 @@ async function run() {
         // only available for admins
         const userCollection = database.db('creative_agency').collection('users');
 
+
+
         // get user form db
         app.get('/users', async (req, res) => {
             res.send(await userCollection.find({}).toArray());
@@ -70,6 +72,18 @@ async function run() {
                 projection: { email: 1 }
             };
             res.send(await userCollection.find(query, option).toArray());
+        })
+
+        // make a customer an admin
+        app.put('/email/:email', async (req, res) => {
+            const email = req.params.email;
+            const body = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const doc = {
+                $set: body
+            };
+            res.send(await userCollection.updateOne(filter, doc, options));
         })
 
     } finally {
