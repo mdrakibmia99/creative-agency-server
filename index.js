@@ -45,6 +45,21 @@ async function run() {
             res.send({ role: role });
         })
 
+
+
+        // add user to db
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const body = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const doc = {
+                $set: body
+            }
+
+            res.send(await userCollection.updateOne(filter, doc, options));
+        })
+
     } finally {
         // await database.close();
     }
