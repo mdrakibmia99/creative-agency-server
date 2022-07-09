@@ -33,6 +33,7 @@ async function run() {
 
         //    for customer 
         const customerReviewCollection = database.db('creative_agency').collection('reviews');
+        const customerOrderCollection = database.db('creative_agency').collection('orders');
 
 
 
@@ -123,6 +124,13 @@ async function run() {
                 projection: { name: 1 }
             };
             res.send(await adminServiceCollection.find({}, option).toArray());
+        })
+
+        // post an order from customer
+        app.post('/order', async (req, res) => {
+            const body = req.body;
+            const course = await customerOrderCollection.insertOne(body);
+            res.send(course);
         })
 
 
