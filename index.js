@@ -27,9 +27,12 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
-        // only available for admins
+        // for admins
         const userCollection = database.db('creative_agency').collection('users');
         const adminServiceCollection = database.db('creative_agency').collection('service');
+
+        //    for customer 
+        const customerReviewCollection = database.db('creative_agency').collection('reviews');
 
 
 
@@ -99,7 +102,20 @@ async function run() {
         app.get('/services', async (req, res) => {
             res.send(await adminServiceCollection.find({}).toArray());
         })
-        
+
+        // add review from user
+        app.put('/review/:email', async (req, res) => {
+            const email = req.params.email;
+            const body = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const doc = {
+                $set: body
+            };
+            const review = await customerReviewCollection.updateOne(filter, doc, options);
+            res.send(review);
+        })
+
 
     } finally {
         // await database.close();
