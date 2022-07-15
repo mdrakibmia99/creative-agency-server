@@ -1,9 +1,9 @@
 // required middleware
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const express = require('express');
 var cors = require('cors')
-const bodyParser = require('body-parser');
 require("dotenv").config();
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 5000;
 // user name: mdrakib
@@ -15,18 +15,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.5yugt.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
-const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverApi: ServerApiVersion.v1
-});
+console.log(uri)
+const database = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
 
 async function run() {
     try {
-        await client.connect();
+        await database.connect();
         // for admins
         const userCollection = database.db('creative_agency').collection('users');
         const adminServiceCollection = database.db('creative_agency').collection('service');
@@ -161,7 +157,7 @@ async function run() {
 
 
 app.get('/', (req, res) => {
-    res.send(`<h1>Creative agency server Connected.</h1>`);
+    res.send('Creative agency server Connected');
 })
 
 app.listen(port, () => {
